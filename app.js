@@ -19,9 +19,26 @@ app.get('/recommendations', async (req, response) => {
   // TODO: do the middleware thing later
   const userId = '9aaec1fc-ea13-4783-81f8-a998c1e0d648'
 
-  const recommendations = await generateRecommendations(userId)
+  // Use getSavedRecommendations(userId) to see if the user already have saved recommendation available.
+  const savedRecommendations = await getSavedRecommendations(userId)
 
-  response.json(recommendations)
+  // If it is the case, return saved recommendation.
+  if (savedRecommendations) {
+    return response.json({
+      fromCache: true,
+      ...savedRecommendations
+    })
+  }
+
+  // It not, get recommendation using the steps above and use saveRecommendations(userId, recommendation) to save the user's recommendation.
+  const newRecommendations = await generateRecommendations(userId)
+
+  response.json({
+    fromCache: false,
+    ...newRecommendations
+  })
+
+  saveRecommendations(userId, newRecommendations)
 })
 
 const server = app.listen(LISTENING_PORT, function () {
