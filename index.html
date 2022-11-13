@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Trayt Thing</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+
+        <h1>Recommendations</h1>
+        <a href="/recommendations">recommendations.json</a>
+        <h2>Director Recommendations</h2>
+        <ul id="director-recommendations"></ul>
+        <h2>Genre Recommendations</h2>
+        <ul id="genre-recommendations"></ul>
+
+        <script>
+            (async function () {
+                const {
+                    unwatchedRecommendationsByDirector,
+                    unwatchedRecommendationsByGenre,
+                } = await fetch('/recommendations').then(response => response.json())
+
+                const directorList = document.getElementById('director-recommendations')
+                const genreList = document.getElementById('genre-recommendations')
+
+                unwatchedRecommendationsByDirector.forEach(renderMovie.bind(undefined, directorList))
+                unwatchedRecommendationsByGenre.forEach(renderMovie.bind(undefined, genreList))
+
+                function renderMovie (target, movie) {
+                    const li = document.createElement('li')
+                    li.innerHTML = `
+                        <div>${movie.name}</div>
+                        <div>${movie.director}</div>
+                    `
+                    target.append(li)
+                }
+            })()
+        </script>
+    </body>
+</html>
