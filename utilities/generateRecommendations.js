@@ -26,13 +26,8 @@ module.exports = async function generateRecommendations (userId) {
   const unwatchedRecommendationsByGenre = recommendationsByGenre.filter(movie => !ratedMovies.some(ratedMovie => ratedMovie.id === movie.id))
 
   return {
-    userId,
-    ratedMovies,
     favoriteMovies,
     favDirector,
-    favGenre,
-    recommendationsByDirector,
-    recommendationsByGenre,
     unwatchedRecommendationsByDirector,
     unwatchedRecommendationsByGenre,
   }
